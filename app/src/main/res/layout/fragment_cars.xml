@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.CarsFragment">
+
+    <TextView
+        android:id="@+id/tv_cars_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Available Cars"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <HorizontalScrollView
+        android:id="@+id/filter_scroll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:scrollbars="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:clipToPadding="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_cars_title">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/category_chips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="All" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_economy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Economy" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_compact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Compact" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_luxury"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Luxury SUV" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_sports"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sports" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_suv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SUV" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_electric"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Electric" />
+
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/tv_price_range"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Price Range: 0€ - 200€"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filter_scroll" />
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/price_slider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:valueFrom="0"
+        android:valueTo="200"
+        app:values="@array/initial_slider_values"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_price_range" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_cars"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/price_slider"
+        tools:listitem="@layout/item_car" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

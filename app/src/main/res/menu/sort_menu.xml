@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_sort"
+        android:icon="@drawable/ic_sort"
+        android:title="@string/sort"
+        app:iconTint="@android:color/white"
+        app:showAsAction="ifRoom">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/sort_default"
+                    android:title="@string/sort_default" />
+                <item
+                    android:id="@+id/sort_price_low_high"
+                    android:title="@string/sort_price_low_high" />
+                <item
+                    android:id="@+id/sort_price_high_low"
+                    android:title="@string/sort_price_high_low" />
+                <item
+                    android:id="@+id/sort_newest"
+                    android:title="@string/sort_newest" />
+            </group>
+        </menu>
+    </item>
+</menu>

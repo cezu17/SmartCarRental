@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">SmartCarRental</string>
+    <string name="app_logo">App Logo</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="back">Back</string>
+    <string name="create_account">Create Account</string>
+    <string name="full_name">Full Name</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone Number</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="title_cars">Cars</string>
+    <string name="title_bookings">Bookings</string>
+    <string name="title_profile">Profile</string>
+    <string name="car_image">Car Image</string>
+    <string name="description">Description</string>
+    <string name="specifications">Specifications</string>
+    <string name="category">Category:</string>
+    <string name="seats">Seats:</string>
+    <string name="transmission">Transmission:</string>
+    <string name="fuel_type">Fuel Type:</string>
+    <string name="book_now">Book Now</string>
+    <string name="book_car">Book Car</string>
+    <string name="select_dates">Select Dates</string>
+    <string name="pickup_date">Pickup Date</string>
+    <string name="return_date">Return Date</string>
+    <string name="select_date">Select Date</string>
+    <string name="booking_summary">Booking Summary</string>
+    <string name="rental_days">Rental Days</string>
+    <string name="daily_rate">Daily Rate</string>
+    <string name="total_price">Total Price</string>
+    <string name="confirm_booking">Confirm Booking</string>
+    <string name="booking_successful">Booking Successful!</string>
+    <string name="please_select_dates">Please select pickup and return dates</string>
+    <string name="invalid_dates">Return date must be after pickup date</string>
+    <string name="car_not_available">Car is not available for selected dates</string>
+    <string name="title_activity_booking_details">BookingDetailsActivity</string>
+    <string name="sort">Sort</string>
+    <string name="sort_default">Default</string>
+    <string name="sort_price_low_high">Price: Low to High</string>
+    <string name="sort_price_high_low">Price: High to Low</string>
+    <string name="sort_newest">Newest First</string>
+
+</resources>
