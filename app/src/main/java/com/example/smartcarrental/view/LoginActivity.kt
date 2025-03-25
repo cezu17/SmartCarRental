@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.smartcarrental.databinding.ActivityLoginBinding
 import com.example.smartcarrental.utils.UserSession
 import com.example.smartcarrental.viewmodel.UserViewModel
+import com.google.firebase.firestore.FirebaseFirestore
+import android.util.Log
 
 class LoginActivity : AppCompatActivity() {
 
@@ -18,6 +20,17 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection("test")
+            .document("test")
+            .get()
+            .addOnSuccessListener { document ->
+                Log.d("FIREBASE_TEST", "Firebase connection successful")
+            }
+            .addOnFailureListener { e ->
+                Log.e("FIREBASE_TEST", "Firebase connection failed", e)
+            }
 
         setupObservers()
         setupClickListeners()

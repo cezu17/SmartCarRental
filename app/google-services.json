@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "318149148366",
+    "project_id": "smartcarrental-1ad35",
+    "storage_bucket": "smartcarrental-1ad35.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318149148366:android:418604690c9ba2e9a5da9f",
+        "android_client_info": {
+          "package_name": "com.example.smartcarrental"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6HA64cC17tjdgHDvz4HqvuUSrmbmRz-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
