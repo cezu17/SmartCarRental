@@ -11,6 +11,12 @@ import com.example.smartcarrental.viewmodel.UserViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
 import android.util.Log
+import com.example.smartcarrental.database.AppDatabase
+import com.example.smartcarrental.model.User
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginActivity : AppCompatActivity() {
 
@@ -84,4 +90,23 @@ class LoginActivity : AppCompatActivity() {
 
         return true
     }
+
+    private fun createAdminUser() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val userDao = AppDatabase.getDatabase(this@LoginActivity).userDao()
+            val adminUser = User(
+                username = "admin",
+                email = "admin@smartcarrental.com",
+                password = "admin123",
+                fullName = "Admin",
+                phoneNumber = "0711111111",
+                isAdmin = true
+            )
+            userDao.insertUser(adminUser)
+            withContext(Dispatchers.Main) {
+                Toast.makeText(this@LoginActivity, "Admin user created", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 }

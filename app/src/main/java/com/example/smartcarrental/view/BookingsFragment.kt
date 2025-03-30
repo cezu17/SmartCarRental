@@ -8,9 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartcarrental.adapter.BookingAdapter
+import com.example.smartcarrental.adapter.BookingWithCar
 import com.example.smartcarrental.databinding.FragmentBookingsBinding
 import com.example.smartcarrental.utils.UserSession
 import com.example.smartcarrental.viewmodel.BookingViewModel
+import java.util.Date
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class BookingsFragment : Fragment() {
 
@@ -68,6 +72,25 @@ class BookingsFragment : Fragment() {
                 binding.tvNoBookings.visibility = View.GONE
                 binding.rvBookings.visibility = View.VISIBLE
                 bookingAdapter.submitList(bookings)
+                updateBookingStatuses(bookings)
+            }
+        }
+    }
+
+    private fun updateBookingStatuses(bookings: List<BookingWithCar>) {
+        val currentDate = Date()
+        viewLifecycleOwner.lifecycleScope.launch {
+            bookings.forEach { bookingWithCar ->
+                val booking = bookingWithCar.booking
+                val newStatus = when {
+                    currentDate.before(booking.startDate) -> "PENDING"
+                    currentDate.after(booking.endDate) -> "COMPLETED"
+                    else -> "ACTIVE"
+                }
+
+                if (booking.status != newStatus) {
+                    bookingViewModel.updateBookingStatus(booking.id, newStatus)
+                }
             }
         }
     }

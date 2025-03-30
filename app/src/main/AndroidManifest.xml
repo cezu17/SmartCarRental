@@ -56,6 +56,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+        <service
+            android:name=".service.MigrationService"
+            android:exported="false" />
     </application>
 
 </manifest>

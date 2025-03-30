@@ -5,15 +5,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.smartcarrental.database.AppDatabase
 import com.example.smartcarrental.model.Car
 import com.example.smartcarrental.repository.CarRepository
+import com.example.smartcarrental.repository.FirebaseCarRepository
+import com.example.smartcarrental.repository.RepositoryFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CarViewModel(application: Application) : AndroidViewModel(application) {
+    private val repositoryFactory = RepositoryFactory(application)
+    private val repository: Any
 
-    private val repository: CarRepository
     private val _allCars = MediatorLiveData<List<Car>>()
     val allCars: LiveData<List<Car>> = _allCars
 
@@ -22,16 +24,6 @@ class CarViewModel(application: Application) : AndroidViewModel(application) {
     private var maxPrice: Double = 200.0
     private var sortOption: SortOption = SortOption.DEFAULT
 
-    init {
-        val carDao = AppDatabase.getDatabase(application).carDao()
-        repository = CarRepository(carDao)
-
-        _allCars.addSource(repository.allCars) { cars ->
-            _allCars.value = filterAndSortCars(cars)
-        }
-    }
-
-    // Add enum for sort options
     enum class SortOption {
         DEFAULT,
         PRICE_LOW_TO_HIGH,
@@ -39,10 +31,26 @@ class CarViewModel(application: Application) : AndroidViewModel(application) {
         NEWEST_FIRST
     }
 
+    init {
+        repository = repositoryFactory.getCarRepository()
+
+        when (repository) {
+            is FirebaseCarRepository -> {
+                _allCars.addSource((repository as FirebaseCarRepository).allCars) { cars ->
+                    _allCars.value = filterAndSortCars(cars)
+                }
+            }
+            is CarRepository -> {
+                _allCars.addSource((repository as CarRepository).allCars) { cars ->
+                    _allCars.value = filterAndSortCars(cars)
+                }
+            }
+        }
+    }
+
     fun setSortOption(option: SortOption) {
         this.sortOption = option
-
-        repository.allCars.value?.let { cars ->
+        _allCars.value?.let { cars ->
             _allCars.value = filterAndSortCars(cars)
         }
     }
@@ -51,8 +59,7 @@ class CarViewModel(application: Application) : AndroidViewModel(application) {
         this.selectedCategory = category
         this.minPrice = minPrice
         this.maxPrice = maxPrice
-
-        repository.allCars.value?.let { cars ->
+        _allCars.value?.let { cars ->
             _allCars.value = filterAndSortCars(cars)
         }
     }
@@ -62,7 +69,6 @@ class CarViewModel(application: Application) : AndroidViewModel(application) {
             val matchesCategory = selectedCategory == null || selectedCategory == "All" ||
                     car.category == selectedCategory
             val matchesPrice = car.price >= minPrice && car.price <= maxPrice
-
             matchesCategory && matchesPrice && car.isAvailable
         }
 
@@ -75,22 +81,38 @@ class CarViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getCarById(carId: Long): LiveData<Car> {
-        return repository.getCarById(carId)
+        return when (repository) {
+            is FirebaseCarRepository -> (repository as FirebaseCarRepository).getCarById(carId)
+            is CarRepository -> (repository as CarRepository).getCarById(carId)
+            else -> MediatorLiveData()
+        }
     }
 
     fun insertCar(car: Car) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insertCar(car)
+        when (repository) {
+            is FirebaseCarRepository -> (repository as FirebaseCarRepository).insertCar(car)
+            is CarRepository -> (repository as CarRepository).insertCar(car)
+        }
     }
 
     fun updateCar(car: Car) = viewModelScope.launch(Dispatchers.IO) {
-        repository.updateCar(car)
+        when (repository) {
+            is FirebaseCarRepository -> (repository as FirebaseCarRepository).updateCar(car)
+            is CarRepository -> (repository as CarRepository).updateCar(car)
+        }
     }
 
     fun deleteCar(car: Car) = viewModelScope.launch(Dispatchers.IO) {
-        repository.deleteCar(car)
+        when (repository) {
+            is FirebaseCarRepository -> (repository as FirebaseCarRepository).deleteCar(car)
+            is CarRepository -> (repository as CarRepository).deleteCar(car)
+        }
     }
 
     fun updateCarAvailability(carId: Long, isAvailable: Boolean) = viewModelScope.launch(Dispatchers.IO) {
-        repository.updateCarAvailability(carId, isAvailable)
+        when (repository) {
+            is FirebaseCarRepository -> (repository as FirebaseCarRepository).updateCarAvailability(carId, isAvailable)
+            is CarRepository -> (repository as CarRepository).updateCarAvailability(carId, isAvailable)
+        }
     }
 }

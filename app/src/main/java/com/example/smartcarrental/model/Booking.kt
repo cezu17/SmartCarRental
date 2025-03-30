@@ -25,10 +25,10 @@ import java.util.Date
 data class Booking(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val carId: Long,
-    val userId: Long,
-    val startDate: Date,
-    val endDate: Date,
-    val totalPrice: Double,
-    val status: String
+    val carId: Long = 0,
+    val userId: Long = 0,
+    val startDate: Date = Date(),
+    val endDate: Date = Date(),
+    val totalPrice: Double = 0.0,
+    val status: String = ""
 )

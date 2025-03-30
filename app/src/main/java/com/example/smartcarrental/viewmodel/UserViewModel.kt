@@ -5,16 +5,18 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.smartcarrental.database.AppDatabase
 import com.example.smartcarrental.model.User
+import com.example.smartcarrental.repository.FirebaseUserRepository
+import com.example.smartcarrental.repository.RepositoryFactory
 import com.example.smartcarrental.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
+    private val repositoryFactory = RepositoryFactory(application)
+    private val repository: Any
 
-    private val repository: UserRepository
     val allUsers: LiveData<List<User>>
     private val _currentUser = MutableLiveData<User?>()
     val currentUser: LiveData<User?> = _currentUser
@@ -22,19 +24,34 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     val loginResult: LiveData<Boolean> = _loginResult
 
     init {
-        val userDao = AppDatabase.getDatabase(application).userDao()
-        repository = UserRepository(userDao)
-        allUsers = repository.allUsers
+        repository = repositoryFactory.getUserRepository()
+
+        allUsers = when (repository) {
+            is FirebaseUserRepository -> (repository as FirebaseUserRepository).allUsers
+            is UserRepository -> (repository as UserRepository).allUsers
+            else -> MutableLiveData(emptyList())
+        }
     }
 
     fun getUserById(userId: Long): LiveData<User> {
-        return repository.getUserById(userId)
+        return when (repository) {
+            is FirebaseUserRepository -> (repository as FirebaseUserRepository).getUserById(userId)
+            is UserRepository -> (repository as UserRepository).getUserById(userId)
+            else -> MutableLiveData()
+        }
     }
 
     fun login(username: String, password: String) = viewModelScope.launch {
         val user = withContext(Dispatchers.IO) {
-            repository.login(username, password)
+            when (repository) {
+                is FirebaseUserRepository ->
+                    (repository as FirebaseUserRepository).login(username, password)
+                is UserRepository ->
+                    (repository as UserRepository).login(username, password)
+                else -> null
+            }
         }
+
         _currentUser.value = user
         _loginResult.value = user != null
     }
@@ -45,12 +62,24 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     fun register(user: User) = viewModelScope.launch {
         val existingUser = withContext(Dispatchers.IO) {
-            repository.getUserByUsername(user.username)
+            when (repository) {
+                is FirebaseUserRepository ->
+                    (repository as FirebaseUserRepository).getUserByUsername(user.username)
+                is UserRepository ->
+                    (repository as UserRepository).getUserByUsername(user.username)
+                else -> null
+            }
         }
 
         if (existingUser == null) {
             val userId = withContext(Dispatchers.IO) {
-                repository.insertUser(user)
+                when (repository) {
+                    is FirebaseUserRepository ->
+                        (repository as FirebaseUserRepository).insertUser(user)
+                    is UserRepository ->
+                        (repository as UserRepository).insertUser(user)
+                    else -> -1L
+                }
             }
 
             if (userId > 0) {
@@ -65,10 +94,16 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateUser(user: User) = viewModelScope.launch(Dispatchers.IO) {
-        repository.updateUser(user)
+        when (repository) {
+            is FirebaseUserRepository -> (repository as FirebaseUserRepository).updateUser(user)
+            is UserRepository -> (repository as UserRepository).updateUser(user)
+        }
     }
 
     fun deleteUser(user: User) = viewModelScope.launch(Dispatchers.IO) {
-        repository.deleteUser(user)
+        when (repository) {
+            is FirebaseUserRepository -> (repository as FirebaseUserRepository).deleteUser(user)
+            is UserRepository -> (repository as UserRepository).deleteUser(user)
+        }
     }
 }

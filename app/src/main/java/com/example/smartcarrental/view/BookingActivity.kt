@@ -101,6 +101,10 @@ class BookingActivity : AppCompatActivity() {
                 }
                 startActivity(intent)
                 finish()
+            } else {
+                Toast.makeText(this, "Booking failed. The dates may conflict with existing bookings.", Toast.LENGTH_LONG).show()
+                binding.tvErrorMessage.text = "The selected dates are not available for this car."
+                binding.tvErrorMessage.visibility = View.VISIBLE
             }
         }
     }
