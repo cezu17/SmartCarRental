@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import com.example.smartcarrental.model.Car
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import java.util.Calendar
+import java.util.Date
 
 class FirebaseCarRepository {
     private val db = FirebaseFirestore.getInstance()
@@ -121,5 +123,63 @@ class FirebaseCarRepository {
         carsCollection.document(carId.toString())
             .update("isAvailable", isAvailable)
             .await()
+    }
+
+    suspend fun getAvailableCarsOnDate(date: Date): List<Car> {
+        val allCarsSnapshot = carsCollection.get().await()
+        val allCars = allCarsSnapshot.documents.mapNotNull { doc ->
+            doc.toObject(Car::class.java)?.copy(id = doc.id.toLongOrNull() ?: 0)
+        }
+
+        val result = mutableListOf<Car>()
+
+        for (car in allCars) {
+            val isAvailable = checkCarAvailabilityOnDate(car.id, date)
+            if (isAvailable) {
+                result.add(car)
+            }
+        }
+
+        return result
+    }
+
+    private suspend fun checkCarAvailabilityOnDate(carId: Long, date: Date): Boolean {
+        val startOfDay = Calendar.getInstance().apply {
+            time = date
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.time
+
+        val endOfDay = Calendar.getInstance().apply {
+            time = date
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
+            set(Calendar.MILLISECOND, 999)
+        }.time
+
+        val bookingsOnDate = db.collection("bookings")
+            .whereEqualTo("carId", carId)
+            .whereGreaterThanOrEqualTo("startDate", startOfDay)
+            .whereLessThanOrEqualTo("startDate", endOfDay)
+            .get()
+            .await()
+            .documents
+
+        if (bookingsOnDate.isNotEmpty()) {
+            return false
+        }
+
+        val spanningBookings = db.collection("bookings")
+            .whereEqualTo("carId", carId)
+            .whereLessThanOrEqualTo("startDate", startOfDay)
+            .whereGreaterThanOrEqualTo("endDate", endOfDay)
+            .get()
+            .await()
+            .documents
+
+        return spanningBookings.isEmpty()
     }
 }

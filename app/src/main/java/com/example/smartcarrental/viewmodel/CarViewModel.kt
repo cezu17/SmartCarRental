@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.smartcarrental.model.Car
 import com.example.smartcarrental.repository.CarRepository
@@ -11,6 +12,8 @@ import com.example.smartcarrental.repository.FirebaseCarRepository
 import com.example.smartcarrental.repository.RepositoryFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Date
 
 class CarViewModel(application: Application) : AndroidViewModel(application) {
     private val repositoryFactory = RepositoryFactory(application)
@@ -23,6 +26,9 @@ class CarViewModel(application: Application) : AndroidViewModel(application) {
     private var minPrice: Double = 0.0
     private var maxPrice: Double = 200.0
     private var sortOption: SortOption = SortOption.DEFAULT
+
+    private var selectedDate: Date? = null
+    private val _availableCarsOnDate = MutableLiveData<List<Car>>()
 
     enum class SortOption {
         DEFAULT,
@@ -113,6 +119,27 @@ class CarViewModel(application: Application) : AndroidViewModel(application) {
         when (repository) {
             is FirebaseCarRepository -> (repository as FirebaseCarRepository).updateCarAvailability(carId, isAvailable)
             is CarRepository -> (repository as CarRepository).updateCarAvailability(carId, isAvailable)
+        }
+    }
+
+    fun setSelectedDate(date: Date) {
+        selectedDate = date
+        viewModelScope.launch {
+            val allCars = when (repository) {
+                is FirebaseCarRepository -> (repository as FirebaseCarRepository).allCars.value
+                is CarRepository -> (repository as CarRepository).allCars.value
+                else -> null
+            } ?: listOf()
+
+            val firebaseCarRepo = repository as? FirebaseCarRepository
+            if (firebaseCarRepo != null) {
+                val availableCarsOnDate = withContext(Dispatchers.IO) {
+                    firebaseCarRepo.getAvailableCarsOnDate(date)
+                }
+                _allCars.value = filterAndSortCars(availableCarsOnDate)
+            } else {
+                _allCars.value = filterAndSortCars(allCars)
+            }
         }
     }
 }

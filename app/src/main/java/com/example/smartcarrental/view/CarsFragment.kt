@@ -1,5 +1,6 @@
 package com.example.smartcarrental.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -7,11 +8,14 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.smartcarrental.R
 import com.example.smartcarrental.adapter.CarAdapter
+import com.example.smartcarrental.adapter.DateAdapter
 import com.example.smartcarrental.databinding.FragmentCarsBinding
 import com.example.smartcarrental.viewmodel.CarViewModel
 import com.google.android.material.chip.Chip
@@ -32,6 +36,10 @@ class CarsFragment : Fragment() {
     private var minPrice: Double = 0.0
     private var maxPrice: Double = 200.0
 
+    private var currentMinPrice: Double = 0.0
+    private var currentMaxPrice: Double = 200.0
+
+
     private var currentSortOption = CarViewModel.SortOption.DEFAULT
 
     override fun onCreateView(
@@ -49,7 +57,9 @@ class CarsFragment : Fragment() {
 
         setupRecyclerView()
         setupFilterChips()
-        setupPriceSlider()
+        //setupPriceSlider()
+        setupDatePicker()
+        setupPriceFilterButton()
         observeViewModel()
     }
 
@@ -102,6 +112,58 @@ class CarsFragment : Fragment() {
         }
     }
 
+    private fun setupPriceFilterButton() {
+        binding.fabPriceFilter.setOnClickListener {
+            val dialogView = layoutInflater.inflate(R.layout.dialog_price_filter, null)
+            val dialog = AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .create()
+
+            val rangeSlider = dialogView.findViewById<RangeSlider>(R.id.priceSlider)
+            val tvPriceRange = dialogView.findViewById<TextView>(R.id.tvPriceRange)
+            val btnApply = dialogView.findViewById<Button>(R.id.btnApplyFilter)
+            val btnReset = dialogView.findViewById<Button>(R.id.btnResetFilter)
+
+            val currentValues = listOf(0f, 200f)
+            rangeSlider.values = currentValues
+
+            val updatePriceRangeText = {
+                val values = rangeSlider.values
+                tvPriceRange.text = "${values[0].toInt()}€ - ${values[1].toInt()}€"
+            }
+
+            updatePriceRangeText()
+
+            rangeSlider.addOnChangeListener { slider, _, _ ->
+                updatePriceRangeText()
+            }
+
+            btnApply.setOnClickListener {
+                val minPrice = rangeSlider.values[0].toDouble()
+                val maxPrice = rangeSlider.values[1].toDouble()
+                currentMinPrice = minPrice
+                currentMaxPrice = maxPrice
+
+                carViewModel.setFilters(selectedCategory, minPrice, maxPrice)
+                dialog.dismiss()
+            }
+
+            btnReset.setOnClickListener {
+                rangeSlider.values = listOf(0f, 200f)
+                updatePriceRangeText()
+            }
+
+            dialog.show()
+        }
+    }
+
+    private fun setupDatePicker() {
+        val dateAdapter = DateAdapter { selectedDate ->
+            carViewModel.setSelectedDate(selectedDate)
+        }
+        binding.rvDates.adapter = dateAdapter
+    }
+
     private fun setupFilterChips() {
         binding.chipAll.isChecked = true
 
@@ -139,26 +201,6 @@ class CarsFragment : Fragment() {
             selectedCategory = "Electric"
             applyFilters()
         }
-    }
-
-    private fun setupPriceSlider() {
-        val currencyFormat = NumberFormat.getCurrencyInstance()
-        currencyFormat.currency = Currency.getInstance("EUR")
-        currencyFormat.maximumFractionDigits = 0
-
-        binding.priceSlider.addOnChangeListener { slider, _, _ ->
-            val values = slider.values
-            minPrice = values[0].toDouble()
-            maxPrice = values[1].toDouble()
-
-            binding.tvPriceRange.text = "Price Range: ${currencyFormat.format(minPrice)} - ${currencyFormat.format(maxPrice)}"
-            applyFilters()
-        }
-
-
-        minPrice = binding.priceSlider.values[0].toDouble()
-        maxPrice = binding.priceSlider.values[1].toDouble()
-        binding.tvPriceRange.text = "Price Range: ${currencyFormat.format(minPrice)} - ${currencyFormat.format(maxPrice)}"
     }
 
     private fun applyFilters() {
