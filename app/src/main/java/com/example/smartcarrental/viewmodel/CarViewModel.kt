@@ -65,6 +65,7 @@ class CarViewModel(application: Application) : AndroidViewModel(application) {
         this.selectedCategory = category
         this.minPrice = minPrice
         this.maxPrice = maxPrice
+
         _allCars.value?.let { cars ->
             _allCars.value = filterAndSortCars(cars)
         }

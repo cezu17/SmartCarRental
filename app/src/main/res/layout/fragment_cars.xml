@@ -6,18 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".view.CarsFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDates"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="2dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp" />
+
     <HorizontalScrollView
         android:id="@+id/filter_scroll"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="2dp"
         android:scrollbars="none"
         android:scrollbarSize="0dp"
         android:padding="0dp"
         android:clipToPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/rvDates">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/category_chips"
@@ -32,59 +46,74 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="All" />
+                android:text="All"
+                app:chipBackgroundColor="@color/chip_background_color_selector"
+                app:chipStrokeColor="#673AB7"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/chip_text_color_selector" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_economy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Economy" />
+                android:text="Economy"
+                app:chipBackgroundColor="@color/chip_background_color_selector"
+                app:chipStrokeColor="#673AB7"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/chip_text_color_selector" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_compact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Compact" />
+                android:text="Compact"
+                app:chipBackgroundColor="@color/chip_background_color_selector"
+                app:chipStrokeColor="#673AB7"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/chip_text_color_selector" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_luxury"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Luxury SUV" />
+                android:text="Luxury SUV"
+                app:chipBackgroundColor="@color/chip_background_color_selector"
+                app:chipStrokeColor="#673AB7"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/chip_text_color_selector" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_sports"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sports" />
+                android:text="Sports"
+                app:chipBackgroundColor="@color/chip_background_color_selector"
+                app:chipStrokeColor="#673AB7"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/chip_text_color_selector" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_suv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SUV" />
+                android:text="SUV"
+                app:chipBackgroundColor="@color/chip_background_color_selector"
+                app:chipStrokeColor="#673AB7"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/chip_text_color_selector" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_electric"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Electric" />
+                android:text="Electric"
+                app:chipBackgroundColor="@color/chip_background_color_selector"
+                app:chipStrokeColor="#673AB7"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/chip_text_color_selector" />
 
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvDates"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/filter_scroll" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabPriceFilter"
@@ -100,13 +129,13 @@
         android:id="@+id/rv_cars"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:clipToPadding="false"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvDates"
+        app:layout_constraintTop_toBottomOf="@+id/filter_scroll"
         tools:listitem="@layout/item_car" />
 
     <ProgressBar

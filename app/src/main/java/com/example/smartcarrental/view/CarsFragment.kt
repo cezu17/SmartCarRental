@@ -20,9 +20,6 @@ import com.example.smartcarrental.databinding.FragmentCarsBinding
 import com.example.smartcarrental.viewmodel.CarViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.slider.RangeSlider
-import java.text.NumberFormat
-import java.util.Currency
-import kotlin.math.roundToInt
 
 class CarsFragment : Fragment() {
 
@@ -38,8 +35,6 @@ class CarsFragment : Fragment() {
 
     private var currentMinPrice: Double = 0.0
     private var currentMaxPrice: Double = 200.0
-
-
     private var currentSortOption = CarViewModel.SortOption.DEFAULT
 
     override fun onCreateView(
@@ -57,7 +52,6 @@ class CarsFragment : Fragment() {
 
         setupRecyclerView()
         setupFilterChips()
-        //setupPriceSlider()
         setupDatePicker()
         setupPriceFilterButton()
         observeViewModel()
@@ -124,8 +118,7 @@ class CarsFragment : Fragment() {
             val btnApply = dialogView.findViewById<Button>(R.id.btnApplyFilter)
             val btnReset = dialogView.findViewById<Button>(R.id.btnResetFilter)
 
-            val currentValues = listOf(0f, 200f)
-            rangeSlider.values = currentValues
+            rangeSlider.values = listOf(currentMinPrice.toFloat(), currentMaxPrice.toFloat())
 
             val updatePriceRangeText = {
                 val values = rangeSlider.values
@@ -165,46 +158,44 @@ class CarsFragment : Fragment() {
     }
 
     private fun setupFilterChips() {
-        binding.chipAll.isChecked = true
-
-        binding.chipAll.setOnClickListener {
+        binding.categoryChips.findViewById<Chip>(R.id.chip_all).setOnClickListener {
             selectedCategory = "All"
-            applyFilters()
+            carViewModel.setFilters(selectedCategory, currentMinPrice, currentMaxPrice)
         }
 
-        binding.chipEconomy.setOnClickListener {
+        binding.categoryChips.findViewById<Chip>(R.id.chip_economy).setOnClickListener {
             selectedCategory = "Economy"
-            applyFilters()
+            carViewModel.setFilters(selectedCategory, currentMinPrice, currentMaxPrice)
         }
 
-        binding.chipCompact.setOnClickListener {
+        binding.categoryChips.findViewById<Chip>(R.id.chip_compact).setOnClickListener {
             selectedCategory = "Compact"
-            applyFilters()
+            carViewModel.setFilters(selectedCategory, currentMinPrice, currentMaxPrice)
         }
 
-        binding.chipLuxury.setOnClickListener {
+        binding.categoryChips.findViewById<Chip>(R.id.chip_luxury).setOnClickListener {
             selectedCategory = "Luxury SUV"
-            applyFilters()
+            carViewModel.setFilters(selectedCategory, currentMinPrice, currentMaxPrice)
         }
 
-        binding.chipSports.setOnClickListener {
+        binding.categoryChips.findViewById<Chip>(R.id.chip_sports).setOnClickListener {
             selectedCategory = "Sports"
-            applyFilters()
+            carViewModel.setFilters(selectedCategory, currentMinPrice, currentMaxPrice)
         }
 
-        binding.chipSuv.setOnClickListener {
+        binding.categoryChips.findViewById<Chip>(R.id.chip_suv).setOnClickListener {
             selectedCategory = "SUV"
-            applyFilters()
+            carViewModel.setFilters(selectedCategory, currentMinPrice, currentMaxPrice)
         }
 
-        binding.chipElectric.setOnClickListener {
+        binding.categoryChips.findViewById<Chip>(R.id.chip_electric).setOnClickListener {
             selectedCategory = "Electric"
-            applyFilters()
+            carViewModel.setFilters(selectedCategory, currentMinPrice, currentMaxPrice)
         }
     }
 
     private fun applyFilters() {
-        carViewModel.setFilters(selectedCategory, minPrice, maxPrice)
+        carViewModel.setFilters(selectedCategory, currentMinPrice, currentMaxPrice)
     }
 
     private fun observeViewModel() {
