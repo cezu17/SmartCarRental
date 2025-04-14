@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".SmartCarRentalApplication"
@@ -29,12 +30,17 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" />
+            android:value="@string/google_maps_key" />
 
 
         <activity
             android:name=".view.BookingActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".view.CarMapActivity"
+            android:exported="true" />
+
         <activity
             android:name=".view.CarDetailsActivity"
             android:exported="false" />

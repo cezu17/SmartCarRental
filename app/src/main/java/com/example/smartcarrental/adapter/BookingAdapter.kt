@@ -43,7 +43,6 @@ class BookingAdapter : ListAdapter<BookingWithCar, BookingAdapter.BookingViewHol
             binding.tvBookingPrice.text = currencyFormat.format(booking.totalPrice)
             binding.tvBookingStatus.text = booking.status
 
-            // Set status background color based on status
             val statusColor = when (booking.status) {
                 "PENDING" -> R.color.colorPending
                 "ACTIVE" -> R.color.colorActive
@@ -55,7 +54,6 @@ class BookingAdapter : ListAdapter<BookingWithCar, BookingAdapter.BookingViewHol
                 ContextCompat.getColor(binding.root.context, statusColor)
             )
 
-            // Load car image
             val context = binding.root.context
             val resourceId = context.resources.getIdentifier(
                 car.imageUrl, "drawable", context.packageName

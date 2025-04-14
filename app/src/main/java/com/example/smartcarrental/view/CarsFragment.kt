@@ -1,6 +1,7 @@
 package com.example.smartcarrental.view
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -54,7 +55,10 @@ class CarsFragment : Fragment() {
         setupFilterChips()
         setupDatePicker()
         setupPriceFilterButton()
+        setupMapFab()
         observeViewModel()
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -204,6 +208,12 @@ class CarsFragment : Fragment() {
         carViewModel.allCars.observe(viewLifecycleOwner) { cars ->
             binding.progressBar.visibility = View.GONE
             carAdapter.submitList(cars)
+        }
+    }
+
+    private fun setupMapFab() {
+        binding.fabMap.setOnClickListener {
+            startActivity(Intent(requireContext(), CarMapActivity::class.java))
         }
     }
 

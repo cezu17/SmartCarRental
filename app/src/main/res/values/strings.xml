@@ -43,5 +43,6 @@
     <string name="sort_price_low_high">Price: Low to High</string>
     <string name="sort_price_high_low">Price: High to Low</string>
     <string name="sort_newest">Newest First</string>
+    <string name="returne">Return</string>
 
 </resources>

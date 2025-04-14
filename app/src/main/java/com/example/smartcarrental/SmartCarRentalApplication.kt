@@ -10,9 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class SmartCarRentalApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        // Initialize Firebase
         FirebaseApp.initializeApp(this)
-        // Enable Firestore offline persistence
         val settings = com.google.firebase.firestore.FirebaseFirestoreSettings.Builder()
             .setPersistenceEnabled(true)
             .build()
@@ -23,7 +21,6 @@ class SmartCarRentalApplication : Application() {
     private fun seedCarsToFirebase() {
         val db = FirebaseFirestore.getInstance()
 
-        // Check if cars already exist
         db.collection("cars").get()
             .addOnSuccessListener { documents ->
                 if (documents.isEmpty) {

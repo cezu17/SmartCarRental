@@ -94,7 +94,7 @@ class BookingActivity : AppCompatActivity() {
 
         bookingViewModel.bookingResult.observe(this) { isSuccess ->
             if (isSuccess) {
-                Toast.makeText(this, getString(R.string.booking_successful), Toast.LENGTH_LONG).show()
+                //Toast.makeText(this, getString(R.string.booking_successful), Toast.LENGTH_LONG).show()
 
                 val intent = Intent(this, MainActivity::class.java).apply {
                     putExtra("open_tab", "bookings")

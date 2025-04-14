@@ -13,6 +13,7 @@ import com.example.smartcarrental.repository.CarRepository
 import com.example.smartcarrental.repository.FirebaseBookingRepository
 import com.example.smartcarrental.repository.FirebaseCarRepository
 import com.example.smartcarrental.repository.RepositoryFactory
+import com.example.smartcarrental.utils.NotificationHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,6 +23,7 @@ class BookingViewModel(application: Application) : AndroidViewModel(application)
     private val repositoryFactory = RepositoryFactory(application)
     private val bookingRepository: Any
     private val carRepository: Any
+    private val notificationHelper = NotificationHelper(application)
 
     val allBookings: LiveData<List<Booking>>
 
@@ -174,6 +176,22 @@ class BookingViewModel(application: Application) : AndroidViewModel(application)
                             (carRepository as FirebaseCarRepository).updateCarAvailability(booking.carId, false)
                         is CarRepository ->
                             (carRepository as CarRepository).updateCarAvailability(booking.carId, false)
+                    }
+
+                    val car = when (carRepository) {
+                        is FirebaseCarRepository ->
+                            (carRepository as FirebaseCarRepository).getCarByIdSync(booking.carId)
+                        is CarRepository ->
+                            (carRepository as CarRepository).getCarByIdSync(booking.carId)
+                        else -> null
+                    }
+
+                    car?.let {
+                        withContext(Dispatchers.Main) {
+                            notificationHelper.showBookingConfirmationNotification(
+                                booking.copy(id = bookingId), it
+                            )
+                        }
                     }
                 }
                 _bookingResult.value = true
