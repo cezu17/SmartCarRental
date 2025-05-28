@@ -29,6 +29,7 @@ data class Booking(
     val userId: Long = 0,
     val startDate: Date = Date(),
     val endDate: Date = Date(),
+    val rating: Float? = null,
     val totalPrice: Double = 0.0,
     val status: String = ""
 )

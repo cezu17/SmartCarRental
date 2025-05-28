@@ -15,7 +15,9 @@ import java.text.SimpleDateFormat
 import java.util.Currency
 import java.util.Locale
 
-class BookingAdapter : ListAdapter<BookingWithCar, BookingAdapter.BookingViewHolder>(BookingDiffCallback()) {
+class BookingAdapter(
+    private val onBookingClick: (BookingWithCar) -> Unit
+) : ListAdapter<BookingWithCar, BookingAdapter.BookingViewHolder>(BookingDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookingViewHolder {
         val binding = ItemBookingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -37,6 +39,10 @@ class BookingAdapter : ListAdapter<BookingWithCar, BookingAdapter.BookingViewHol
         fun bind(bookingWithCar: BookingWithCar) {
             val booking = bookingWithCar.booking
             val car = bookingWithCar.car
+
+            binding.root.setOnClickListener {
+                onBookingClick(bookingWithCar)
+            }
 
             binding.tvCarName.text = "${car.make} ${car.model}"
             binding.tvBookingDates.text = "${dateFormat.format(booking.startDate)} - ${dateFormat.format(booking.endDate)}"

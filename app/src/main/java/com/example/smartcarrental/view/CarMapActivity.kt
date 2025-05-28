@@ -9,8 +9,10 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CarMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -29,11 +31,20 @@ class CarMapActivity : AppCompatActivity(), OnMapReadyCallback {
             .setOnClickListener {
                 finish()
             }
+
+        findViewById<FloatingActionButton>(R.id.fab_toggle_map)
+            .setOnClickListener {
+                map.mapType = if (map.mapType == GoogleMap.MAP_TYPE_NORMAL)
+                    GoogleMap.MAP_TYPE_SATELLITE
+                else
+                    GoogleMap.MAP_TYPE_NORMAL
+            }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map.uiSettings.isZoomControlsEnabled = true
+        map.uiSettings.isCompassEnabled = true
         val bucharestCenter = LatLng(44.4268, 26.1025)
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(bucharestCenter, 12f))
 
@@ -50,6 +61,7 @@ class CarMapActivity : AppCompatActivity(), OnMapReadyCallback {
                 val marker = map.addMarker(
                     MarkerOptions()
                         .position(carPosition)
+                        //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
                         .title("${car.make} ${car.model}")
                         .snippet("${car.price}€/day")
                 )
