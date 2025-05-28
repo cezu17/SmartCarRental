@@ -34,7 +34,6 @@ class CarMapActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map.uiSettings.isZoomControlsEnabled = true
-        // Center the map on Bucharest
         val bucharestCenter = LatLng(44.4268, 26.1025)
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(bucharestCenter, 12f))
 
