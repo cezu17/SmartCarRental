@@ -26,7 +26,7 @@ class RegisterActivity : AppCompatActivity() {
         userViewModel.loginResult.observe(this) { isSuccess ->
             if (isSuccess) {
                 Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show()
-                finish() // Go back to login screen
+                finish()
             } else {
                 Toast.makeText(this, "Registration failed. Username may already exist.", Toast.LENGTH_SHORT).show()
             }

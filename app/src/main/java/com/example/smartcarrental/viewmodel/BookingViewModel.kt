@@ -14,6 +14,8 @@ import com.example.smartcarrental.repository.FirebaseBookingRepository
 import com.example.smartcarrental.repository.FirebaseCarRepository
 import com.example.smartcarrental.repository.RepositoryFactory
 import com.example.smartcarrental.utils.NotificationHelper
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,6 +26,9 @@ class BookingViewModel(application: Application) : AndroidViewModel(application)
     private val bookingRepository: Any
     private val carRepository: Any
     private val notificationHelper = NotificationHelper(application)
+
+
+
 
     val allBookings: LiveData<List<Booking>>
 

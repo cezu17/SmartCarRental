@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.smartcarrental.view.ChatFragment
 import com.example.smartcarrental.R
 import com.example.smartcarrental.databinding.ActivityMainBinding
 
@@ -82,6 +83,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.navigation_profile -> {
                     loadFragment(ProfileFragment())
+                    return@setOnItemSelectedListener true
+                }
+                R.id.navigation_chat -> {
+                    loadFragment(ChatFragment())
                     return@setOnItemSelectedListener true
                 }
             }

@@ -44,5 +44,10 @@
     <string name="sort_price_high_low">Price: High to Low</string>
     <string name="sort_newest">Newest First</string>
     <string name="returne">Return</string>
+    <string name="bot_avatar">Chatbot avatar</string>
+    <string name="user_avatar">User avatar</string>
+    <string name="type_a_message">Type a message…</string>
+    <string name="send">Send</string>
+    <string name="traffic_toggle">Toggle traffic layer</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.example.smartcarrental.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -56,6 +57,17 @@ class BookingAdapter(
                 "CANCELLED" -> R.color.colorCancelled
                 else -> R.color.colorPending
             }
+
+            if (booking.status == "PENDING") {
+                binding.btnPlanRoute.visibility = View.VISIBLE
+                // 2) Wire its click to your callback
+                binding.btnPlanRoute.setOnClickListener {
+                    onBookingClick(bookingWithCar)
+                }
+            } else {
+                binding.btnPlanRoute.visibility = View.GONE
+            }
+
             binding.tvBookingStatus.setBackgroundColor(
                 ContextCompat.getColor(binding.root.context, statusColor)
             )

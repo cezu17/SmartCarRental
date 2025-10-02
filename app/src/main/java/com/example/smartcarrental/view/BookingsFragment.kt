@@ -1,5 +1,6 @@
 package com.example.smartcarrental.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,12 +48,19 @@ class BookingsFragment : Fragment() {
 
     private fun setupRecyclerView() {
         bookingAdapter = BookingAdapter { bwc ->
-            if (bwc.booking.status == "COMPLETED") {
-                handleRatingFlow(bwc)
-            } else {
-                Toast.makeText(requireContext(),
-                    "You can only rate completed bookings",
-                    Toast.LENGTH_SHORT).show()
+            when (bwc.booking.status) {
+                "PENDING" -> {
+                    startActivity( Intent(requireContext(), RoutePlannerActivity::class.java) )
+                }
+                "COMPLETED" -> {
+                    handleRatingFlow(bwc)
+                }
+                else -> {
+                    Toast.makeText(requireContext(),
+                        "You can only plan routes for pending bookings",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
